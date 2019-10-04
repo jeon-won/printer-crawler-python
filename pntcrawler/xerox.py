@@ -71,4 +71,3 @@ def get_xerox_dp3055(dept, model, ip):
     except Exception as ex:
         data = get_empty_data(ex, dept, model, ip)
         return data
-
