@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from openpyxl import Workbook
 from datetime import datetime
+
 from pntcrawler.config import *
 
 # Selenium을 사용하여 html을 얻어오는 함수
