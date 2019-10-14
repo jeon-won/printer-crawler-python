@@ -13,17 +13,22 @@ dept_xerox_c2265 = [
   { 'dept': 'C부서', 'model': 'Xerox DCIVC2265', 'ip': '192.168.0.3' },
 ]
 
+# 제록스 APVC5580, DCVC5585 모델
+dept_xerox_c5580 = [
+  { 'dept': 'D부서', 'model': 'Xerox APVC5580', 'ip': '192.168.0.4' },
+]
+
 # 제록스 DP3055 모델
 dept_xerox_dp3055 = [
-  { 'dept': 'D부서', 'model': 'Xerox DP3055', 'ip': '192.168.0.4' },
+  { 'dept': 'E부서', 'model': 'Xerox DP3055', 'ip': '192.168.0.5' },
 ]
 
 # OKI C843 모델
 dept_oki_c843 = [
-  { 'dept': 'E부서', 'model': 'OKI C843DN', 'ip': '192.168.0.5' }, 
+  { 'dept': 'F부서', 'model': 'OKI C843DN', 'ip': '192.168.0.6' }, 
 ]
 
 # OKI ES5112 모델
 dept_oki_es5112 = [
-  { 'dept': 'F부서', 'model': 'OKI ES5112', 'ip': '192.168.0.6' }, 
+  { 'dept': 'G부서', 'model': 'OKI ES5112', 'ip': '192.168.0.7' }, 
 ]
