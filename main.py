@@ -23,6 +23,11 @@ for cm3091 in dept_sindoh_cm3091:
 for xerox in dept_xerox_c2265:
     item = get_xerox_c2265(xerox['dept'], xerox['model'], xerox['ip'])
     consumable_list.append(item)
+    
+# 제록스 컬러복합기(APVC5580, DCVC5585) 크롤링
+for c5580 in dept_xerox_c5580:
+    item = get_xerox_c5580(c5580['dept'], c5580['model'], c5580['ip'])
+    consumable_list.append(item)
 
 # 제록스 흑백프린터(DP3055) 크롤링
 for xerox in dept_xerox_dp3055:
