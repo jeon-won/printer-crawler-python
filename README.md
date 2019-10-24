@@ -2,7 +2,7 @@
 
 ## 개요
 
-파이썬을 배우다가 전 부서에 프린터(복합기) 소모품을 효율적으로 보급하고자 어떤 소모품이 필요하게 될지 체크하기 위해 만들어 본 프로그램입니다.
+각종 네트워크 프린터의 소모품 정보(토너, 드럼 잔량)를 수합하여 엑셀 파일로 저장하는 프로그램입니다.
 
 
 ## 필요한 것들
@@ -32,7 +32,7 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 
 ## 사용 방법
 
-1. crawling_target.py에 크롤링할 프린터 정보를 입력합니다.
+1. crawling_target.py에 크롤링할 네트워크 프린터 정보를 입력합니다.
 2. pntcrawler/config.py에 ChromeDriver 실행파일의 위치를 **절대경로**로 지정합니다.
 3. `python main.py` 명령어를 실행하거나 `main.bat` 파일을 실행합니다.
 4. 크롤링이 완료되면 기본적으로 crawldata 폴더에 엑셀파일이 생성됩니다.
@@ -61,7 +61,7 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 여러 모듈에서 공통적으로 사용하는 함수 정의
 
 * get_page_source(): html을 얻어옴
-* get_empty_data(): 크롤링 에러 발생 시 빈 데이터 반환
+* get_error_data(): 크롤링 에러 발생 시 에러 데이터 반환
 * create_xlsx(): 크롤링 최종 결과를 엑셀파일로 수합
 
 #### config.py
@@ -86,6 +86,7 @@ OKI 프린터 크롤링 함수 정의
 
 * get_sindoh_cm3091(): CM3091 모델 크롤링
 * get_sindoh_d417(): D417, D716, CM3091 일부 모델 크롤링
+* get_sindoh_b605n(): B605n 모델 크롤링
 
 #### xerox.py
 
@@ -93,10 +94,6 @@ OKI 프린터 크롤링 함수 정의
 
 * get_xerox_c2265(): DCIVC2265, APVC2275, APVC3373, DCVC3374, DCVC3376, DCVIC3371, DPC5005D 모델 크롤링
 * get_xerox_c5580(): APVC5580, DCVC5585 모델 크롤링
+* get_xerox_iv2060(): DCIV2060, DCIII3007, DCIV3060, DCIV3065 모델 크롤링
+* get_xerox_ii3005(): DCII3005 모델 크롤링
 * get_xerox_dp3055(): DP3055 모델 크롤링
-
-
-## 변경내역
-
-* 2019-10-04: 최초 작성
-* 2019-10-14: 제록스 APVC5580, DCVC5585 모델 
