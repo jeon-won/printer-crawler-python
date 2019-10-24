@@ -1,13 +1,24 @@
 from bs4 import BeautifulSoup
-from pntcrawler.common import get_empty_data, get_page_source
+from pntcrawler.common import get_error_data, get_page_source
+import re
 
-# 작동 모델: 신도 CM3091
+
 def get_sindoh_cm3091(dept, model, ip):
-    try:
-        print(dept + " 부서의 " + model + " 소모품 정보 크롤링 중...")
+    """
+    Sindoh CM3091 모델의 소모품 정보를 Dictionary로 반환합니다.
 
+    Args:
+        dept (str): 부서 명
+        model (str): 프린터 모델 명
+        ip (str): 프린터 IP 주소
+
+    Return:
+        <class 'dict'>
+    """
+
+    try:
         # 크롤링
-        url = 'http://' + ip + '/wcd/system_consumable.xml'
+        url = f"http://{ip}/wcd/system_consumable.xml"
         source = get_page_source(url)
         soup = BeautifulSoup(source, 'html.parser')
         levelPer1 = soup.findAll('input', {'class': 'LevelPer LevelPer1'}) # class="LevelPer LevelPer1"인 input 태그를 전부 가져옴
@@ -16,7 +27,7 @@ def get_sindoh_cm3091(dept, model, ip):
         levelPer4 = soup.findAll('input', {'class': 'LevelPer LevelPer4'})
 
         # Dictionary 생성
-        data = { 
+        info = { 
             'dept': dept,
             'model': model,
             'ip': ip,
@@ -31,44 +42,99 @@ def get_sindoh_cm3091(dept, model, ip):
             'note': ""
         }
 
-        print("성공!")
-        return data
+        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(info)
+        return info
 
     except Exception as ex:
-        data = get_empty_data(ex, dept, model, ip)
-        return data
+        info = get_error_data(ex, dept, model, ip)
+        return info
 
 
-# 작동 모델: 신도 D417, D716, CM3091 일부 모델
 def get_sindoh_d417(dept, model, ip):
+    """
+    Sindoh D417, D716 및 CM3091 일부 모델의 소모품 정보를 Dictionary로 반환합니다.
+
+    Args:
+        dept (str): 부서 명
+        model (str): 프린터 모델 명
+        ip (str): 프린터 IP 주소
+
+    Return:
+        <class 'dict'>
+    """
+
     try: 
-        print(dept + " 부서의 " + model + " 소모품 정보 크롤링 중...")
-        
         # 크롤링
-        url = 'http://' + ip + '/wcd/system_consumable.xml'
+        url = f"http://{ip}/wcd/system_consumable.xml"
         source = get_page_source(url)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('td', {'width': '45px'})
 
         # Dictionary 생성
-        data = { 
+        info = { 
             'dept': dept,
             'model': model,
             'ip': ip,
-            'toner_y': int(data[0].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_m': int(data[1].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_c': int(data[2].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_k': int(data[3].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_c' : int(data[4].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_m' : int(data[5].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_y' : int(data[6].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_k' : int(data[7].contents[0].replace('\n', '').replace('\t', '').replace('%', '')),
+            'toner_y': int(re.findall(r"\d+", data[0].getText())[0]),
+            'toner_m': int(re.findall(r"\d+", data[1].getText())[0]),
+            'toner_c': int(re.findall(r"\d+", data[2].getText())[0]),
+            'toner_k': int(re.findall(r"\d+", data[3].getText())[0]),
+            'drum_c' : int(re.findall(r"\d+", data[4].getText())[0]),
+            'drum_m' : int(re.findall(r"\d+", data[5].getText())[0]),
+            'drum_y' : int(re.findall(r"\d+", data[6].getText())[0]),
+            'drum_k' : int(re.findall(r"\d+", data[7].getText())[0]),
             'note': ""
         }
 
-        print("성공!")
-        return data
+        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(info)      
+        return info
 
     except Exception as ex:
-        data = get_empty_data(ex, dept, model, ip)
-        return data
+        info = get_error_data(ex, dept, model, ip)
+        return info
+
+
+def get_sindoh_b605n(dept, model, ip):
+    """
+    Sindoh B605n 모델의 소모품 정보를 Dictionary로 반환합니다.
+
+    Args:
+        dept (str): 부서 명
+        model (str): 프린터 모델 명
+        ip (str): 프린터 IP 주소
+
+    Return:
+        <class 'dict'>
+    """
+    try: 
+        # 크롤링
+        url = f"http://{ip}/status.htm"
+        source = get_page_source(url)
+        soup = BeautifulSoup(source, 'html.parser')
+        data = soup.findAll('font', {'id': 'smsz'})
+
+        # Dictionary 생성
+        info = { 
+            'dept': dept,
+            'model': model,
+            'ip': ip,
+            'toner_k': int(re.findall(r"\d+", data[2].getText())[0]),
+            'toner_c': "",
+            'toner_m': "",
+            'toner_y': "",
+            'drum_k' : "", # 이상하게 드럼 정보는 찾을 수 없음...
+            'drum_c' : "",
+            'drum_m' : "",
+            'drum_y' : "",
+            'note': ""
+        }
+
+        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(info)     
+        return info
+
+    except Exception as ex:
+        info = get_error_data(ex, dept, model, ip)
+        return info

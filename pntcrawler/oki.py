@@ -1,73 +1,95 @@
 from bs4 import BeautifulSoup
-from pntcrawler.common import get_empty_data, get_page_source
+from pntcrawler.common import get_error_data, get_page_source
+import re
 
-# 작동 모델: OKI C843
+
 def get_oki_c843(dept, model, ip):
-    try: 
-        print(dept + " 부서의 " + model + " 소모품 정보 크롤링 중...")
+    """
+    OKI C843 모델의 소모품 정보를 Dictionary로 반환합니다.
 
+    Args:
+        dept (str): 부서 명
+        model (str): 프린터 모델 명
+        ip (str): 프린터 IP 주소
+
+    Return:
+        <class 'dict'>
+    """
+
+    try:
         # 크롤링
-        url = "http://" + ip + "/printer/suppliessum.htm"
+        url = f"http://{ip}/printer/suppliessum.htm"
         source = get_page_source(url)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('td', {'width': '70%'})
 
         # Dictionary 생성
-        info = { 
+        info = {
             'dept': dept,
             'model': model,
             'ip': ip,
-            'toner_k': int(data[0].contents[1].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_c': int(data[1].contents[1].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_m': int(data[2].contents[1].replace('\n', '').replace('\t', '').replace('%', '')),
-            'toner_y': int(data[3].contents[1].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_k' : int(data[4].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_c' : int(data[5].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_m' : int(data[6].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
-            'drum_y' : int(data[7].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
-            # 'belt': int(data[7].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
-            # 'fuser': int(data[8].contents[2].replace('\n', '').replace('\t', '').replace('%', '')),
+            'toner_k': int(re.findall(r"\d+", data[0].contents[1])[0]),
+            'toner_c': int(re.findall(r"\d+", data[1].contents[1])[0]),
+            'toner_m': int(re.findall(r"\d+", data[2].contents[1])[0]),
+            'toner_y': int(re.findall(r"\d+", data[3].contents[1])[0]),
+            'drum_k': int(re.findall(r"\d+", data[4].contents[2])[0]),
+            'drum_c': int(re.findall(r"\d+", data[5].contents[2])[0]),
+            'drum_m': int(re.findall(r"\d+", data[6].contents[2])[0]),
+            'drum_y': int(re.findall(r"\d+", data[7].contents[2])[0]),
+            # 'belt': int(re.findall("\d+", data[7].contents[2])[0]),
+            # 'fuser': int(re.findall("\d+", data[8].contents[2])[0]),
             'note': ""
         }
 
-        print("성공!")
+        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(info)
         return info
 
     except Exception as ex:
-        data = get_empty_data(ex, dept, model, ip)
-        return data
+        info = get_error_data(ex, dept, model, ip)
+        return info
 
 
-# 작동 모델: OKI ES5112
 def get_oki_es5112(dept, model, ip):
-    try: 
-        print(dept + " 부서의 " + model + " 소모품 정보 크롤링 중...")
+    """
+    OKI ES5112 모델의 소모품 정보를 Dictionary로 반환합니다.
 
+    Args:
+        dept (str): 부서 명
+        model (str): 프린터 모델 명
+        ip (str): 프린터 IP 주소
+
+    Return:
+        <class 'dict'>
+    """
+
+    try:
         # 크롤링
-        url = "http://" + ip + "/printer/suppliessum.htm"
+        url = f"http://{ip}/printer/suppliessum.htm"
         source = get_page_source(url)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('img', {'src': '../img/blackbar.gif'})
 
         # Dictionary 생성
-        info = { 
+        info = {
             'dept': dept,
             'model': model,
             'ip': ip,
-            'toner_k': int(data[0]['width'].replace('%', '')),
+            'toner_k': int(re.findall(r"\d+", data[0]['width'])[0]),
             'toner_c': "",
             'toner_m': "",
             'toner_y': "",
-            'drum_k' : int(data[1]['width'].replace('%', '')),
+            'drum_k': int(re.findall(r"\d+", data[1]['width'])[0]),
             'drum_c': "",
             'drum_m': "",
             'drum_y': "",
             'note': ""
         }
 
-        print("성공!")
+        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(info)
         return info
 
     except Exception as ex:
-        data = get_empty_data(ex, dept, model, ip)
-        return data
+        info = get_error_data(ex, dept, model, ip)
+        return info
