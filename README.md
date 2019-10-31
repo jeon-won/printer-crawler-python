@@ -38,6 +38,12 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 4. 크롤링이 완료되면 기본적으로 crawldata 폴더에 엑셀파일이 생성됩니다.
 
 
+## 문제점
+
+잔량 주의 및 경고 잔량에 색상을 표시할 때 빈 셀 값에도 색상이 표시되는 문제점이 있습니다. 이 문제는 차차 해결을...
+
+크롬 78 버전에서는 작동하지 않습니다. [stackoverflow](https://stackoverflow.com/questions/58589425/possible-issue-with-chromedriver-78-selenium-can-not-find-web-element-of-pdf-op)에 올라온 글을 보면 아마 크롬 드라이버 문제인 것 같습니다. 크롬 76 버전에서 정상 작동 확인했으며 최신 버전의 크롬을 이미 설치한 경우 [chrome offline installer](https://www.neowin.net/news/google-chrome-76-offline-installer)를 사용하여 크롬 76 버전을 설치할 수 있습니다.
+
 
 ## 프로그램 구조
 
@@ -68,10 +74,23 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 
 프린터 크롤러 패키지에서 사용하는 설정 값
 
-* chromedriver_path: 크롬 드라이버 절대경로
-* save_folder: 크롤링 결과를 저장할 폴더 명(기본: crawldata)
-* save_file_prefix: 엑셀 파일명에 붙일 접두어
-* strftime_param: 엑셀 파일명에 시간을 명시할 때 strftime() 함수에 적용할 매개변수
+* 크롬 드라이버 설정 관련
+  * chromedriver_path: 크롬 드라이버 **절대경로**
+
+* 엑셀 파일 저장 관련
+  * save_folder: 크롤링 결과를 저장할 폴더 명(기본: crawldata)
+  * save_file_prefix: 엑셀 파일명에 붙일 접두어
+  * strftime_param: 엑셀 파일명에 시간을 명시할 때 strftime() 함수에 적용할 매개변수
+
+* 토너 주의 경고 및 색상
+  * warning_color: 주의 색상
+  * alert_color: 경고 색상
+
+* 토너 주의 및 경고 잔량(잔량이 아래 값 이하인 경우 엑셀파일에 색상이 표시됩니다.)
+  * toner_warning: 토너 주의 잔량
+  * toner_alert: 토너 경고 잔량
+  * drum_warning: 드럼 주의 잔량
+  * drum_alert: 드럼 경고 잔량
 
 #### oki.py
 
