@@ -40,9 +40,7 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 
 ## 문제점
 
-잔량 주의 및 경고 잔량에 색상을 표시할 때 빈 셀 값에도 색상이 표시되는 문제점이 있습니다. 이 문제는 차차 해결을...
-
-크롬 78 버전에서는 작동하지 않습니다. [stackoverflow](https://stackoverflow.com/questions/58589425/possible-issue-with-chromedriver-78-selenium-can-not-find-web-element-of-pdf-op)에 올라온 글을 보면 아마 크롬 드라이버 문제인 것 같습니다. 크롬 76 버전에서 정상 작동 확인했으며 최신 버전의 크롬을 이미 설치한 경우 [chrome offline installer](https://www.neowin.net/news/google-chrome-76-offline-installer)를 사용하여 크롬 76 버전을 설치할 수 있습니다.
+크롬 78 버전에서 Selenium이 html 소스를 얻어오지 못하는 문제가 있습니다. [stackoverflow](https://stackoverflow.com/questions/58589425/possible-issue-with-chromedriver-78-selenium-can-not-find-web-element-of-pdf-op)에 올라온 글을 보면 아마 크롬 드라이버 문제인 것 같습니다. 크롬 76 버전에서 정상 작동되며 최신 버전의 크롬을 이미 설치한 경우 [chrome offline installer](https://www.neowin.net/news/google-chrome-76-offline-installer)를 사용하여 크롬 76 버전을 사용할 수 있습니다.
 
 
 ## 프로그램 구조
