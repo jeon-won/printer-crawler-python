@@ -25,15 +25,20 @@ def get_page_source(url):
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('lang=ko_KR')
 
-    # Selenium을 이용하여 소모품 정보 페이지 HTML 얻어오기
-    path = chromedriver_path
-    driver = webdriver.Chrome(path, options=chrome_options)
-    # driver.implicitly_wait(10)
-    driver.get(url)
-    pagesource = driver.page_source
-    driver.close()
+    try: 
+        # Selenium을 이용하여 소모품 정보 페이지 HTML 얻어오기
+        path = chromedriver_path
+        driver = webdriver.Chrome(path, options=chrome_options)
+        driver.implicitly_wait(5)
+        driver.get(url)
+        pagesource = driver.page_source
+        driver.close()
 
-    return pagesource
+        return pagesource
+    
+    except Exception as e:
+        print("Selenium 에러!")
+        print(e)
 
 
 def get_error_data(error, dept, model, ip):
@@ -97,26 +102,28 @@ def create_xlsx(data):
                 item["drum_k"], item["drum_c"], item["drum_m"], item["drum_y"],
                 item["note"]
             ])
-
+        
         # 토너 잔량이 주의 및 경고인 경우 색칠하기
-        cells = ws[f"d2:g{ws.max_row}"]  # D~G열: 토너 잔량 표시 범위
-        for cell in cells:
-            for item in cell:
-                if isinstance(item.value, int) and item.value <= toner_alert:
-                    item.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
-                elif isinstance(item.value, int) and toner_alert < item.value <= toner_warning:
-                    item.fill = PatternFill(start_color=warning_color, end_color=warning_color, fill_type='solid')
+        fill_range = ws[f"d2:g{ws.max_row}"]  # D~G열: 토너 잔량 표시 범위
+        for row in fill_range:
+            for cell in row:
+                if isinstance(cell.value, int) and cell.value <= toner_alert:  # 경고 표시
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
+                elif isinstance(cell.value, int) and toner_alert < cell.value <= toner_warning:  # 주의 표시
+                    cell.fill = PatternFill(start_color=warning_color, end_color=warning_color, fill_type='solid')
 
         # 드럼 잔량이 주의 및 경고인 경우 색칠하기
-        cells = ws[f"h2:k{ws.max_row}"]  # H~K열: 드럼 잔량 표시 범위
-        for cell in cells:
-            for item in cell:
-                if isinstance(item.value, int) and item.value <= drum_alert:
-                    item.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')  
-                elif item.value is None:
+        fill_range = ws[f"h2:k{ws.max_row}"]  # H~K열: 드럼 잔량 표시 범위
+        for row in fill_range:
+            for cell in row:
+                if isinstance(cell.value, int) and cell.value <= drum_alert:  # 경고 표시(신도, OKI)
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')  
+                elif isinstance(cell.value, int) and drum_alert < cell.value <= drum_warning:  # 주의 표시(신도, OKI)
+                    cell.fill = PatternFill(start_color=warning_color, end_color=warning_color, fill_type='solid')  
+                elif cell.value is '':  # 공백 셀은 건너뜀
                     continue
-                elif isinstance(item.value, str) and '양호' not in item.value:  ## 빈 셀은 색칠하지 않으려 하는데... 작동하지 않음;;;
-                    item.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
+                elif isinstance(cell.value, str) and '양호' not in cell.value:  # 양호가 아닌 셀에 경고 색상 표시(제록스)
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
         
         # 파일명 지정
         date = datetime.today().strftime(strftime_param)
