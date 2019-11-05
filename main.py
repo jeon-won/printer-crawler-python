@@ -29,6 +29,16 @@ for xerox in dept_xerox_c5580:
     item = x.get_xerox_c5580(xerox['dept'], xerox['model'], xerox['ip'])
     consumable_list.append(item)
 
+# 제록스 DPC1110
+for xerox in dept_xerox_c1110:
+    item = x.get_xerox_c1110(xerox['dept'], xerox['model'], xerox['ip'])
+    consumable_list.append(item)
+
+# 제록스 DPC2200
+for xerox in dept_xerox_c2200:
+    item = x.get_xerox_c2200(xerox['dept'], xerox['model'], xerox['ip'])
+    consumable_list.append(item)
+
 # OKI C843
 for oki in dept_oki_c843:
     item = o.get_oki_c843(oki['dept'], oki['model'], oki['ip'])
