@@ -65,6 +65,7 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 여러 모듈에서 공통적으로 사용하는 함수 정의
 
 * get_page_source(): html을 얻어옴
+* get_crawl_data(): 크롤링 결과를 입력받아 프린터 소모품 정보가 담긴 데이터 반환
 * get_error_data(): 크롤링 에러 발생 시 에러 데이터 반환
 * create_xlsx(): 크롤링 최종 결과를 엑셀파일로 수합
 
@@ -111,6 +112,8 @@ OKI 프린터 크롤링 함수 정의
 
 * get_xerox_c2265(): DCIVC2265, APVC2275, APVC3373, DCVC3374, DCVC3376, DCVIC3371, DPC5005D 모델 크롤링
 * get_xerox_c5580(): APVC5580, DCVC5585 모델 크롤링
+* get_xerox_c1110(): DPC1110 모델 크롤링
+* get_xerox_c2200(): DPC2200 모델 크롤링
 * get_xerox_iv2060(): DCIV2060, DCIII3007, DCIV3060, DCIV3065 모델 크롤링
 * get_xerox_ii3005(): DCII3005 모델 크롤링
 * get_xerox_dp3055(): DP3055 모델 크롤링
