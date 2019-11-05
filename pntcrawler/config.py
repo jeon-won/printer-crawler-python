@@ -1,5 +1,5 @@
 # 크롬 드라이버
-chromedriver_path = "C:/Users/user/Documents/Python/pntcrawler/chromedriver.exe"  # 크롬드라이버 절대경로
+chromedriver_path = "C:/Users/user/Documents/Python/복합기 소모품 정보 크롤링/pntcrawler/chromedriver.exe"  # 절대경로
 
 # 엑셀 파일 저장 관련
 save_folder = "crawldata"  # 크롤링 결과를 저장할 폴더 이름

@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
-from pntcrawler.common import get_error_data, get_page_source
+from pntcrawler.common import get_crawl_data, get_error_data, get_page_source
 import re
 
+"""
+컬러 프린터
+"""
 
 def get_oki_c843(dept, model, ip):
     """
@@ -16,7 +19,7 @@ def get_oki_c843(dept, model, ip):
         <class 'dict'>
     """
 
-    try:
+    try: 
         # 크롤링
         url = f"http://{ip}/printer/suppliessum.htm"
         source = get_page_source(url)
@@ -24,31 +27,30 @@ def get_oki_c843(dept, model, ip):
         data = soup.findAll('td', {'width': '70%'})
 
         # Dictionary 생성
-        info = {
-            'dept': dept,
-            'model': model,
-            'ip': ip,
-            'toner_k': int(re.findall(r"\d+", data[0].contents[1])[0]),
-            'toner_c': int(re.findall(r"\d+", data[1].contents[1])[0]),
-            'toner_m': int(re.findall(r"\d+", data[2].contents[1])[0]),
-            'toner_y': int(re.findall(r"\d+", data[3].contents[1])[0]),
-            'drum_k': int(re.findall(r"\d+", data[4].contents[2])[0]),
-            'drum_c': int(re.findall(r"\d+", data[5].contents[2])[0]),
-            'drum_m': int(re.findall(r"\d+", data[6].contents[2])[0]),
-            'drum_y': int(re.findall(r"\d+", data[7].contents[2])[0]),
-            # 'belt': int(re.findall("\d+", data[7].contents[2])[0]),
-            # 'fuser': int(re.findall("\d+", data[8].contents[2])[0]),
-            'note': ""
-        }
+        data = get_crawl_data(dept = dept, model = model, ip = ip,
+            toner_k = int(re.findall(r"\d+", data[0].contents[1])[0]),
+            toner_c = int(re.findall(r"\d+", data[1].contents[1])[0]),
+            toner_m = int(re.findall(r"\d+", data[2].contents[1])[0]),
+            toner_y = int(re.findall(r"\d+", data[3].contents[1])[0]),
+            drum_k = int(re.findall(r"\d+", data[4].contents[2])[0]),
+            drum_c = int(re.findall(r"\d+", data[5].contents[2])[0]),
+            drum_m = int(re.findall(r"\d+", data[6].contents[2])[0]),
+            drum_y = int(re.findall(r"\d+", data[7].contents[2])[0]))
+        # belt = int(re.findall("\d+", data[7].contents[2])[0])
+        # fuser = int(re.findall("\d+", data[8].contents[2])[0])
 
         print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
-        print(info)
-        return info
+        print(data)
+        return data
 
     except Exception as ex:
-        info = get_error_data(ex, dept, model, ip)
-        return info
+        data = get_error_data(ex, dept, model, ip)
+        return data
 
+
+"""
+흑백 프린터
+"""
 
 def get_oki_es5112(dept, model, ip):
     """
@@ -62,8 +64,8 @@ def get_oki_es5112(dept, model, ip):
     Return:
         <class 'dict'>
     """
-
-    try:
+    
+    try: 
         # 크롤링
         url = f"http://{ip}/printer/suppliessum.htm"
         source = get_page_source(url)
@@ -71,25 +73,14 @@ def get_oki_es5112(dept, model, ip):
         data = soup.findAll('img', {'src': '../img/blackbar.gif'})
 
         # Dictionary 생성
-        info = {
-            'dept': dept,
-            'model': model,
-            'ip': ip,
-            'toner_k': int(re.findall(r"\d+", data[0]['width'])[0]),
-            'toner_c': "",
-            'toner_m': "",
-            'toner_y': "",
-            'drum_k': int(re.findall(r"\d+", data[1]['width'])[0]),
-            'drum_c': "",
-            'drum_m': "",
-            'drum_y': "",
-            'note': ""
-        }
+        data = get_crawl_data(dept = dept, model = model, ip = ip,
+            toner_k = int(re.findall(r"\d+", data[0]['width'])[0]),
+            drum_k = int(re.findall(r"\d+", data[1]['width'])[0]))
 
         print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
-        print(info)
-        return info
+        print(data)
+        return data
 
     except Exception as ex:
-        info = get_error_data(ex, dept, model, ip)
-        return info
+        data = get_error_data(ex, dept, model, ip)
+        return data
