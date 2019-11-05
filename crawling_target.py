@@ -32,6 +32,16 @@ dept_xerox_c5580 = [
   { 'dept': '홍전보산과', 'model': 'Xerox DCVC5585', 'ip': '192.168.0.1' },
 ]
 
+# 제록스 DPC1110 모델
+dept_xerox_c1110 = [
+  { 'dept': '행지정원과', 'model': 'Xerox DPC1110', 'ip': '192.168.0.1' },
+]
+
+# 제록스 DPC2200 모델
+dept_xerox_c2200 = [
+  { 'dept': '문체화육과', 'model': 'Xerox DPC2200', 'ip': '192.168.0.1' },
+]
+
 # 제록스 DCIV2060, DCIII3007, DCIV3060, DCIV3065 모델
 dept_xerox_iv2060 = [
   { 'dept': '공정간보담당관', 'model': 'Xerox APVC5580', 'ip': '192.168.0.1' },
