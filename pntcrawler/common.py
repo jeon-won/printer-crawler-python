@@ -25,7 +25,7 @@ def get_page_source(url):
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('lang=ko_KR')
 
-    try:
+    try: 
         # Selenium을 이용하여 소모품 정보 페이지 HTML 얻어오기
         path = chromedriver_path
         driver = webdriver.Chrome(path, options=chrome_options)
@@ -35,16 +35,16 @@ def get_page_source(url):
         driver.close()
 
         return pagesource
-
+    
     except Exception as e:
         print("Selenium 에러!")
         print(e)
 
 
-def get_crawl_data(dept='', model='', ip='',
-                   toner_k='', toner_c='', toner_m='', toner_y='',
-                   drum_k='', drum_c='', drum_m='', drum_y='',
-                   note=''):
+def get_crawl_data(dept='', model='', ip='', 
+    toner_k='', toner_c='', toner_m='', toner_y='',
+    drum_k='', drum_c='', drum_m='', drum_y='',
+    note=''):
     """
     크롤링 결과를 입력받아 프린터 소모품 정보가 담긴 Dictionary 객체를 반환합니다.
 
@@ -55,11 +55,11 @@ def get_crawl_data(dept='', model='', ip='',
         <class 'dict'>
     """
 
-    data = {
-        'dept': dept, 'model': model, 'ip': ip,
-        'toner_k': toner_k, 'toner_c': toner_c, 'toner_m': toner_m, 'toner_y': toner_y,
-        'drum_k': drum_k, 'drum_c': drum_c, 'drum_m': drum_m, 'drum_y': drum_y,
-        'note': note
+    data = { 
+      'dept': dept, 'model': model, 'ip': ip,
+      'toner_k': toner_k, 'toner_c': toner_c, 'toner_m': toner_m, 'toner_y': toner_y,
+      'drum_k' : drum_k, 'drum_c' : drum_c, 'drum_m' : drum_m, 'drum_y' : drum_y,
+      'note': note
     }
 
     return data
@@ -79,11 +79,15 @@ def get_error_data(error, dept, model, ip):
         <class 'dict'>
     """
 
-    data = get_crawl_data(dept=dept, model=model, ip=ip, note=str(error))
-
+    if 'list index out of range' in str(error):
+        _error = f'{str(error)}: html을 가져올 수 없는 상황(통신 불가 등)이거나 잘못된 크롤링 함수 사용'
+    else:
+        _error = str(error)
+    
     print(f"{dept} 부서의 {model} 크롤링 실패... 원인은 다음과 같습니다.")
-    print(error)
-
+    print(_error)
+    
+    data = get_crawl_data(dept=dept, model=model, ip=ip, note=_error)
     return data
 
 
@@ -97,12 +101,12 @@ def create_xlsx(data):
 
     wb = Workbook()  # 워크북
     ws = wb.active  # 워크시트
-
+    
     # 틀 고정 및 컬럼 명 찍기
     ws.freeze_panes = "A2"
     ws.append([
-        '부서명', '모델', 'IP',
-        '토너(K)', '토너(C)', '토너(M)', '토너(Y)',
+        '부서명', '모델', 'IP', 
+        '토너(K)', '토너(C)', '토너(M)', '토너(Y)', 
         '드럼(K)', '드럼(C)', '드럼(M)', '드럼(Y)',
         '비고'
     ])
@@ -115,59 +119,52 @@ def create_xlsx(data):
         # 폴더 생성
         if not(os.path.isdir(save_folder)):
             os.makedirs(os.path.join(save_folder))
-
+        
         # 각 부서별 토너 및 드럼 잔량 찍기
         for item in data:
             print(item["dept"] + " 부서의 " + item["model"] + " 소모품 정보 저장 중...")
             ws.append([
-                # IP 열에 하이퍼링크 지정
-                item["dept"], item["model"], f'=HYPERLINK("http://{item["ip"]}")',
-                item["toner_k"], item["toner_c"], item["toner_m"], item["toner_y"],
+                item["dept"], item["model"], f'=HYPERLINK("http://{item["ip"]}")',  # IP 열에 하이퍼링크 지정
+                item["toner_k"], item["toner_c"], item["toner_m"], item["toner_y"], 
                 item["drum_k"], item["drum_c"], item["drum_m"], item["drum_y"],
                 item["note"]
             ])
-
+        
         # 토너 잔량이 주의 및 경고인 경우 색칠하기
         fill_range = ws[f"d2:g{ws.max_row}"]  # D~G열: 토너 잔량 표시 범위
         for row in fill_range:
             for cell in row:
-                if isinstance(cell.value, int) and cell.value <= toner_alert:  # 경고 표시
-                    cell.fill = PatternFill(
-                        start_color=alert_color, end_color=alert_color, fill_type='solid')
+                if cell.value is '':  # 공백 셀은 건너뜀
+                    continue
+                elif isinstance(cell.value, int) and cell.value <= toner_alert:  # 경고 표시
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
                 elif isinstance(cell.value, int) and toner_alert < cell.value <= toner_warning:  # 주의 표시
-                    cell.fill = PatternFill(
-                        start_color=warning_color, end_color=warning_color, fill_type='solid')
-                else:  # 토너 잔량이 int로 뜨지 않는 경우('교환시기' 등): 경고 표시
-                    cell.fill = PatternFill(
-                        start_color=alert_color, end_color=alert_color, fill_type='solid')
+                    cell.fill = PatternFill(start_color=warning_color, end_color=warning_color, fill_type='solid')
+                elif isinstance(cell.value, str):  # 토너 잔량이 int로 뜨지 않는 경우('교환시기' 등): 경고 표시
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
 
         # 드럼 잔량이 주의 및 경고인 경우 색칠하기
         fill_range = ws[f"h2:k{ws.max_row}"]  # H~K열: 드럼 잔량 표시 범위
         for row in fill_range:
             for cell in row:
-                if isinstance(cell.value, int) and cell.value <= drum_alert:  # 경고 표시(신도, OKI)
-                    cell.fill = PatternFill(
-                        start_color=alert_color, end_color=alert_color, fill_type='solid')
-                # 주의 표시(신도, OKI)
-                elif isinstance(cell.value, int) and drum_alert < cell.value <= drum_warning:
-                    cell.fill = PatternFill(
-                        start_color=warning_color, end_color=warning_color, fill_type='solid')
-                elif cell.value is '':  # 공백 셀은 건너뜀
+                if cell.value is '':  # 공백 셀은 건너뜀
                     continue
-                # 양호가 아닌 셀에 경고 색상 표시(제록스)
-                elif isinstance(cell.value, str) and '양호' not in cell.value:
-                    cell.fill = PatternFill(
-                        start_color=alert_color, end_color=alert_color, fill_type='solid')
-
+                elif isinstance(cell.value, int) and cell.value <= drum_alert:  # 경고 표시(신도, OKI)
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')  
+                elif isinstance(cell.value, int) and drum_alert < cell.value <= drum_warning:  # 주의 표시(신도, OKI)
+                    cell.fill = PatternFill(start_color=warning_color, end_color=warning_color, fill_type='solid')  
+                elif isinstance(cell.value, str) and '양호' not in cell.value:  # 양호가 아닌 셀에 경고 색상 표시(제록스)
+                    cell.fill = PatternFill(start_color=alert_color, end_color=alert_color, fill_type='solid')
+        
         # 파일명 지정
         date = datetime.today().strftime(strftime_param)
         fileName = f"{save_folder}/{save_file_prefix}_{date}.xlsx"
-
+        
         # 파일 저장
         wb.save(fileName)
         wb.close()
         print("저장 완료!")
-
+    
     except OSError as e:
         print("폴더 생성 실패... 원인은 다음과 같습니다.")
         print(e)
