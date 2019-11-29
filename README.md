@@ -29,6 +29,12 @@ BeautifulSoup는 HTML에서 원하는 정보를 추출하기 위해 사용합니
 
 `pip install beautifulsoup4` 명령어로 설치합니다.
 
+### openpyxl
+
+openpyxl을 사용하여 크롤링 결과를 엑셀 파일로 저장합니다.
+
+`pip install openpyxl` 명령어로 설치합니다.
+
 
 ## 사용 방법
 
