@@ -15,8 +15,8 @@ Selenium은 동적 웹페이지 소스를 얻어올 때 사용하는 라이브�
 
 `pip install selenium` 명령어로 설치합니다.
 
-### ChromeDriver 
-ChromeDriver는 Selenium이 크롬 브라우저를 제어하기 위해 사용합니다. 따라서 사전에 반드시 크롬 브라우저를 설치해야 합니다.
+### 크롬 드라이버
+크롬 드라이버는 Selenium이 크롬 브라우저를 제어하기 위해 사용합니다. 따라서 사전에 반드시 크롬 브라우저를 설치해야 합니다.
 
 https://chromedriver.chromium.org/downloads 에서 사용 중인 크롬 브라우저에 맞는 ChromeDriver를 다운받습니다.
 
@@ -33,7 +33,7 @@ openpyxl을 사용하여 크롤링 결과를 엑셀 파일로 저장합니다.
 
 ## 사용 방법
 1. crawling_target.py에 크롤링할 네트워크 프린터 정보를 입력합니다.
-2. pntcrawler/config.py에 ChromeDriver 실행파일의 위치를 **절대경로**로 지정합니다.
+2. config.json에 크롬 드라이버 실행파일의 위치를 **절대경로**로 지정합니다.
 3. `python main.py` 명령어를 실행하거나 `main.bat` 파일을 실행합니다.
 4. 크롤링이 완료되면 기본적으로 crawldata 폴더에 엑셀파일이 생성됩니다.
 
@@ -58,7 +58,7 @@ MacOS 크롬 79 버전에서 Selenium이 html 소스를 제대로 얻어오는 �
   - crawling_target_folder: 크롤링할 부서 정보(부서명, 모델명, IP주소)가 담긴 JSON 파일이 위치한 폴더 이름 (기본: crawling_target)
   - chromedriver_path: 크롬 드라이버 실행파일 **절대경로**
 * 엑셀 파일 저장 관련
-  - save_folder: 크롤링 결과를 저장할 폴더 이름(기본: crawldata)
+  - save_folder: 크롤링 결과를 저장할 폴더 이름 (기본: crawldata)
   - save_file_prefix: 엑셀 파일명에 붙일 접두어
   - strftime_param: 엑셀 파일명에 시간을 명시할 때 strftime() 함수에 적용할 매개변수
 * 토너 주의 및 경고 잔량: 잔량이 아래 값 이하인 경우 엑셀파일에 색상이 표시됩니다.
@@ -87,7 +87,7 @@ OKI 프린터 크롤링 함수 정의
 
 #### sindoh.py
 신도리코 프린터 크롤링 함수 정의
-* get_sindoh_cm3091(): CM3091 모델 크롤링
+* get_sindoh_cm3091(): CM3091, CM6011 모델 크롤링
 * get_sindoh_d417(): D417, D716, CM3091 일부 모델 크롤링
 * get_sindoh_b605n(): B605n 모델 크롤링
 
