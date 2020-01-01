@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "crawling_target_folder": "crawling_target",
+  "chromedriver_path": "C:/Users/user/Documents/Python/print-crawler-python/pntcrawler/chromedriver_v76.exe",
+  "save_folder": "crawldata",
+  "save_file_prefix": "CrawlingData",
+  "strftime_param": "%Y-%m-%d_%H-%M-%S",
+  "warning_color": "FFFFDF00",
+  "alert_color": "FFFFFF00",
+  "toner_warning": 50,
+  "toner_alert": 25,
+  "drum_warning": 30,
+  "drum_alert": 20
+}

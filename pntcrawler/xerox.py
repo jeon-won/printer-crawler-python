@@ -6,7 +6,7 @@ import re
 컬러 복합기(프린터)
 """
 
-def get_xerox_c2265(dept, model, ip):
+def get_xerox_c2265(dept, model, ip, chrome_driver_path):
     """
     Xerox DCIVC2265, APVC2275, APVC3373, DCVC3374, DCVC3376, DCVIC3371, DPC5005D 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -14,6 +14,7 @@ def get_xerox_c2265(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -22,7 +23,7 @@ def get_xerox_c2265(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/stsply.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('small')
 
@@ -37,7 +38,7 @@ def get_xerox_c2265(dept, model, ip):
             drum_m = data[26].getText(), 
             drum_y = data[28].getText())
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")
         print(data)
 
         return data
@@ -47,7 +48,7 @@ def get_xerox_c2265(dept, model, ip):
         return data
 
 
-def get_xerox_c5580(dept, model, ip):
+def get_xerox_c5580(dept, model, ip, chrome_driver_path):
     """
     Xerox APVC5580, DCVC5585 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -55,6 +56,7 @@ def get_xerox_c5580(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -63,7 +65,7 @@ def get_xerox_c5580(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/stsply.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('small')
         
@@ -86,7 +88,7 @@ def get_xerox_c5580(dept, model, ip):
         # 'staple_crtridge_front': str(data[39].getText()),  # 제본용 스테이플 카트리지(앞쪽)
         # 'staple_crtridge_inside': str(data[41].getText()),  # 제본용 스테이플 카트리지(안쪽)
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")
         print(data)
         return data
     
@@ -95,7 +97,7 @@ def get_xerox_c5580(dept, model, ip):
         return data
 
 
-def get_xerox_c1110(dept, model, ip):
+def get_xerox_c1110(dept, model, ip, chrome_driver_path):
     """
     Xerox DPC1110 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -103,6 +105,7 @@ def get_xerox_c1110(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -111,7 +114,7 @@ def get_xerox_c1110(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/ews/status/statsupl.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('font', {'size': '-1'})
 
@@ -134,7 +137,7 @@ def get_xerox_c1110(dept, model, ip):
             drum_k = drum if drum == '교환시기' else int(re.findall(r"\d+", drum)[0]),)
         # fuser = _fuser if _fuser == '교환시기' else int(re.findall(r"\d+", _fuser)[0]),
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")
         print(data)
         return data
     
@@ -143,7 +146,7 @@ def get_xerox_c1110(dept, model, ip):
         return data
 
 
-def get_xerox_c2200(dept, model, ip):
+def get_xerox_c2200(dept, model, ip, chrome_driver_path):
     """
     Xerox DPC2200 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -151,6 +154,7 @@ def get_xerox_c2200(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -159,7 +163,7 @@ def get_xerox_c2200(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/status/statsupl.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('font', {'size': '-1'})
 
@@ -183,7 +187,7 @@ def get_xerox_c2200(dept, model, ip):
         # fuser = _fuser if _fuser == '교환시기' else int(re.findall(r"\d+", _fuser)[0]),  # 정착부
         # belt_unit = _belt_unit if _belt_unit == '교환시기' else int(re.findall(r"\d+", _belt_unit)[0]),  # 벨트 유닛
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")
         print(data)
         return data
 
@@ -196,7 +200,7 @@ def get_xerox_c2200(dept, model, ip):
 흑백 프린터
 """
 
-def get_xerox_iv2060(dept, model, ip):
+def get_xerox_iv2060(dept, model, ip, chrome_driver_path):
     """
     Xerox DCIV2060, DCIII3007, DCIV3060, DCIV3065 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -204,6 +208,7 @@ def get_xerox_iv2060(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -212,7 +217,7 @@ def get_xerox_iv2060(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/stsply.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('small')
 
@@ -222,7 +227,7 @@ def get_xerox_iv2060(dept, model, ip):
             drum_k = data[9].getText())
         # fuser = data[13].getText()  # 정착부
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")        
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")        
         print(data)
         return data
 
@@ -231,7 +236,7 @@ def get_xerox_iv2060(dept, model, ip):
         return data
 
 
-def get_xerox_ii3005(dept, model, ip):
+def get_xerox_ii3005(dept, model, ip, chrome_driver_path):
     """
     Xerox DCII3005 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -239,6 +244,7 @@ def get_xerox_ii3005(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -247,7 +253,7 @@ def get_xerox_ii3005(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/stsply.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('small')
 
@@ -256,7 +262,7 @@ def get_xerox_ii3005(dept, model, ip):
             toner_k = int(re.findall(r"\d+", data[3].getText())[0]),
             drum_k = data[7].getText())
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")
         print(data)
         return data
 
@@ -265,7 +271,7 @@ def get_xerox_ii3005(dept, model, ip):
         return data
 
 
-def get_xerox_dp3055(dept, model, ip):
+def get_xerox_dp3055(dept, model, ip, chrome_driver_path):
     """
     Xerox DP3055 모델의 소모품 정보를 Dictionary로 반환합니다.
 
@@ -273,6 +279,7 @@ def get_xerox_dp3055(dept, model, ip):
         dept (str): 부서 명
         model (str): 프린터 모델 명
         ip (str): 프린터 IP 주소
+        chrome_driver_path (str): 크롬 드라이버 실행파일 절대경로
 
     Return:
         <class 'dict'>
@@ -281,7 +288,7 @@ def get_xerox_dp3055(dept, model, ip):
     try: 
         # 크롤링
         url = f"http://{ip}/ews/status/statsupl.htm"
-        source = get_page_source(url)
+        source = get_page_source(url, chrome_driver_path)
         soup = BeautifulSoup(source, 'html.parser')
         data = soup.findAll('font', {'size': '-1'})
         
@@ -292,7 +299,7 @@ def get_xerox_dp3055(dept, model, ip):
             toner_k = toner_k if toner_k == '교환시기' else int(re.findall(r"\d+", toner_k)[0]), # 토너잔량이 '교환시기' 또는 숫자로 뜸
             drum_k = toner_k if toner_k == '교환시기' else int(re.findall(r"\d+", toner_k)[0])) # 드럼토너 일체형 모델)
 
-        print(f"{dept} 부서의 {model} 소모품 정보 크롤링 성공!")  
+        print(f"# {dept} 부서의 {model} 소모품 정보 크롤링 성공!")  
         print(data)
 
         return data
