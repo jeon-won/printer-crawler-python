@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.0.1",
   "crawling_target_folder": "crawling_target",
   "chromedriver_path": "C:/Users/user/Documents/Python/print-crawler-python/pntcrawler/chromedriver_v76.exe",
   "save_folder": "crawldata",
