@@ -129,7 +129,7 @@ with open(f"{config['crawling_target_folder']}/dept_xerox_dp3055.json", 'rt', en
         consumable_list.append(result)
 
 # OKI ES5112
-with open(f"{config['crawling_target_folder']}/dept_xerox_es5112.json", 'rt', encoding='UTF8') as json_file:
+with open(f"{config['crawling_target_folder']}/dept_oki_es5112.json", 'rt', encoding='UTF8') as json_file:
     json_obj = json.load(json_file)
     for item in json_obj:
         result = o.get_oki_es5112(
